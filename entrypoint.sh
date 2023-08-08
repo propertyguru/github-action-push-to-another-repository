@@ -179,5 +179,5 @@ git push "$GIT_CMD_REPOSITORY" --set-upstream "$TARGET_BRANCH"
 
 if [[ "$CREATE_PR" = "true" && -z "$BASE_BRANCH" ]]
 then
-  gh pr create -B $BASE_BRANCH -H $TARGET_BRANCH -t 'Merge $TARGET_BRANCH into $BASE_BRANCH' -b 'Created by Github action'
+  gh pr create -B "$BASE_BRANCH" -H "$TARGET_BRANCH" -t "Merge $TARGET_BRANCH into $BASE_BRANCH" -b 'Created by Github action'
 fi
