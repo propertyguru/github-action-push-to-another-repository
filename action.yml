@@ -54,6 +54,18 @@ inputs:
       [Optional] create target branch if not exist. Defaults to `false`
     default: false
     required: false
+  create-pr:
+    type: boolean
+    description: >-
+      [Optional] create pull request. Defaults to `false`
+    default: false
+    required: false
+  base-branch:
+    description: >-
+      [Optional] set base branch name for the destination repository. Defaults
+      to "master"
+    default: master
+    required: false
 
 runs:
   using: docker
@@ -71,6 +83,8 @@ runs:
     - '${{ inputs.commit-message }}'
     - '${{ inputs.target-directory }}'
     - '${{ inputs.create-target-branch-if-needed }}'
+    - '${{ inputs.create-pr }}'
+    - '${{ inputs.base-branch }}'
 branding:
   icon: git-commit
   color: green
