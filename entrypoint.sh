@@ -171,15 +171,21 @@ git status
 
 echo "[+] git diff-index:"
 # git diff-index : to avoid doing the git commit failing if there are no changes to be commit
-git diff-index --quiet HEAD || git commit --message "$COMMIT_MESSAGE"
+git diff-index --quiet HEAD
 
-echo "[+] Pushing git commit"
-# --set-upstream: sets de branch when pushing to a branch that does not exist
-git push "$GIT_CMD_REPOSITORY" --set-upstream "$TARGET_BRANCH"
-
-# Create a pull request if needed
-if [[ "$CREATE_PR" = "true" && -n "$BASE_BRANCH" && -n "$(git diff-index --quiet HEAD)" ]]
+if [[ -n "$(git diff-index --quiet HEAD)" ]]
 then
-  echo "[+] Creating pull request"
-  gh pr create -B "$BASE_BRANCH" -H "$TARGET_BRANCH" -t "Merge $TARGET_BRANCH into $BASE_BRANCH" -b 'Created by Github action'
+	echo "[+] Pushing git commit"
+	git commit --message "$COMMIT_MESSAGE"
+	# --set-upstream: sets de branch when pushing to a branch that does not exist
+	git push "$GIT_CMD_REPOSITORY" --set-upstream "$TARGET_BRANCH"
+
+	# Create a pull request if needed
+	if [[ "$CREATE_PR" = "true" && -n "$BASE_BRANCH" ]]
+	then
+		echo "[+] Creating pull request"
+		gh pr create -B "$BASE_BRANCH" -H "$TARGET_BRANCH" -t "Merge $TARGET_BRANCH into $BASE_BRANCH" -b 'Created by Github action'
+	fi
+else
+	echo "[+] No changes to commit"
 fi
