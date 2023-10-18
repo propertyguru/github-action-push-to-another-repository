@@ -177,7 +177,8 @@ echo "[+] Pushing git commit"
 # --set-upstream: sets de branch when pushing to a branch that does not exist
 git push "$GIT_CMD_REPOSITORY" --set-upstream "$TARGET_BRANCH"
 
-if [[ "$CREATE_PR" = "true" && -n "$BASE_BRANCH" ]]
+# Create a pull request if needed
+if [[ "$CREATE_PR" = "true" && -n "$BASE_BRANCH" && -n "$(git diff-index --quiet HEAD)" ]]
 then
   echo "[+] Creating pull request"
   gh pr create -B "$BASE_BRANCH" -H "$TARGET_BRANCH" -t "Merge $TARGET_BRANCH into $BASE_BRANCH" -b 'Created by Github action'
