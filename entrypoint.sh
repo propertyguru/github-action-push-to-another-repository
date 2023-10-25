@@ -169,14 +169,15 @@ git add .
 echo "[+] git status:"
 git status
 
+if [ -z "$(git status --porcelain)" ]; then
+  exit 0
+else
+  git status --porcelain 
+fi
+
 echo "[+] git diff-index:"
 # git diff-index : to avoid doing the git commit failing if there are no changes to be commit
 git diff-index --quiet HEAD || git commit --message "$COMMIT_MESSAGE"
-
-if [[ -z "$(git diff-index --quiet HEAD)" ]]
-then
-    exit 0
-fi
 
 echo "[+] Pushing git commit"
 # --set-upstream: sets de branch when pushing to a branch that does not exist
