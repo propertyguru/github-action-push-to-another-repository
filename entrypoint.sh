@@ -120,23 +120,30 @@ ls -al /
 
 mv "$TEMP_DIR/.git" "$CLONE_DIR/.git"
 
+echo "[+] Checking if local $SOURCE_DIRECTORY exists and is not empty"
+if [ ! -d "$SOURCE_DIRECTORY" ] || [ -z "$(ls -A "$SOURCE_DIRECTORY")" ]; then
+    echo "$SOURCE_DIRECTORY does not exist or is empty"
+    echo "Skipping push DAG file to Composer Project."
+    exit 0
+fi
+
 echo "[+] List contents of $SOURCE_DIRECTORY"
 ls "$SOURCE_DIRECTORY"
 
-echo "[+] Checking if local $SOURCE_DIRECTORY exist"
-if [ ! -d "$SOURCE_DIRECTORY" ]
-then
-	echo "ERROR: $SOURCE_DIRECTORY does not exist"
-	echo "This directory needs to exist when push-to-another-repository is executed"
-	echo
-	echo "In the example it is created by ./build.sh: https://github.com/cpina/push-to-another-repository-example/blob/main/.github/workflows/ci.yml#L19"
-	echo
-	echo "If you want to copy a directory that exist in the source repository"
-	echo "to the target repository: you need to clone the source repository"
-	echo "in a previous step in the same build section. For example using"
-	echo "actions/checkout@v2. See: https://github.com/cpina/push-to-another-repository-example/blob/main/.github/workflows/ci.yml#L16"
-	exit 1
-fi
+# echo "[+] Checking if local $SOURCE_DIRECTORY exist"
+# if [ ! -d "$SOURCE_DIRECTORY" ]
+# then
+# 	echo "ERROR: $SOURCE_DIRECTORY does not exist"
+# 	echo "This directory needs to exist when push-to-another-repository is executed"
+# 	echo
+# 	echo "In the example it is created by ./build.sh: https://github.com/cpina/push-to-another-repository-example/blob/main/.github/workflows/ci.yml#L19"
+# 	echo
+# 	echo "If you want to copy a directory that exist in the source repository"
+# 	echo "to the target repository: you need to clone the source repository"
+# 	echo "in a previous step in the same build section. For example using"
+# 	echo "actions/checkout@v2. See: https://github.com/cpina/push-to-another-repository-example/blob/main/.github/workflows/ci.yml#L16"
+# 	exit 1
+# fi
 
 echo "[+] Copying contents of source repository folder $SOURCE_DIRECTORY to folder $TARGET_DIRECTORY in git repo $DESTINATION_REPOSITORY_NAME"
 cp -ra "$SOURCE_DIRECTORY"/. "$CLONE_DIR/$TARGET_DIRECTORY"
